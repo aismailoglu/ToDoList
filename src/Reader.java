@@ -12,10 +12,23 @@ public class Reader
     }
 
 
-    public int scanInt()
+    public int scanInt(int min, int max)
     {
-        String input = scanner.nextLine();
-        return Integer.parseInt(input);
+        while (true) {
+            try {
+                String input = scanner.nextLine();
+                int res = Integer.parseInt(input);
+                if (res > max)
+                    System.out.println("the number is too big");
+                else
+                    return res;
+
+            } catch (NumberFormatException e) {
+                System.out.println("please enter correct Number");
+                //return 6;
+            }
+        }
+
     }
 
 //    public static void main(String[] args)

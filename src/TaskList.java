@@ -1,33 +1,22 @@
+import java.io.*;
 import java.security.PrivateKey;
 import java.util.*;
 
 public class TaskList {
 
 
-    private List<Task> list = new ArrayList<>();
+    private List<Task> list;
     private Reader reader = new Reader();
 
-    public void add(String title, String date) {
-        //System.out.println(list);
 
-//        Task t = new Task(title, date, null, null);
-//        list.add(t);
+    public TaskList() {
+        list = loadFromFile();
     }
 
-//    public void add()
-//    {
-//        System.out.println("enter the title of the task: ");
-//        String title  = scanner.nextLine();
-//
-//        System.out.println("enter the date of the task: ");
-//        String date  = scanner.nextLine();
-//
-//
-//        Task t = new Task(title, date, null, null);
-//        list.add(t);
-//    }
-
-    //private void add
+    public int size()
+    {
+       return list.size();
+    }
 
 
     public void filterByTaskName(String givenTaskName) {
@@ -49,7 +38,7 @@ public class TaskList {
             } else if (changeStatus.equals("CLOSED")) {
                 statusClosed += statusClosed;
             }
-            System.out.println( "" + (index+1) +  ":"  + list.get(index));  //todo index plus 1
+            System.out.println("" + (index + 1) + ":" + list.get(index));  //todo index plus 1
         }
         System.out.println("Number of Tasks open : " + statusOpen + " Number of Tasks Closed " + statusClosed);
 
@@ -62,7 +51,7 @@ public class TaskList {
         System.out.println("1.Sort based on Date");
         System.out.println("2.Sort based on Project");
         int choice;
-        choice = reader.scanInt();
+        choice = reader.scanInt(1, 2);
         ;
         if (choice == 1) {
 
@@ -96,9 +85,9 @@ public class TaskList {
         int index = 0;
         System.out.println("Delete The Task");
         System.out.println(" Enter the Task No");
-        list.remove(removeIndex-1);             //todo pay attention -1
+        list.remove(removeIndex - 1);             //todo pay attention -1
         System.out.println(" Task deleted Successfully");
-         System.out.println( "" + (index+1) +  ":"  + list.get(index));
+        System.out.println("" + (index + 1) + ":" + list.get(index)); //todo
 
     }
 
@@ -110,7 +99,7 @@ public class TaskList {
         System.out.println("2.Project Name");
         System.out.println("3.Status");
         System.out.println("4.Date");
-        int option = reader.scanInt();
+        int option = reader.scanInt(1,4);
         switch (option) {
 
             case 1:
@@ -134,8 +123,48 @@ public class TaskList {
 
         }
 
-        // remove and readd
 
     }
 
+
+    public List<Task> loadFromFile() {
+        List<Task> list = new ArrayList<Task>();
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream("ToDo.txt"));
+            list = (List<Task>) in.readObject();
+        } catch (EOFException e) {
+            System.out.println("File is empty. First thing you need to do is create a task!");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+
+    }
+
+    public void saveToFile(List<Task> tasksToSave)
+    {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File("ToDo.txt")));
+            out.writeObject(tasksToSave);
+
+            System.out.println("TASKS SAVED:");
+            System.out.println();
+            tasksToSave.forEach(task -> System.out.println("* " + task.getTaskName()));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void save() throws IOException {
+        saveToFile(list);
+    }
 }

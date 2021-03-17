@@ -1,9 +1,11 @@
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         TaskList taskList = new TaskList();
         Reader reader = new Reader();
@@ -20,7 +22,7 @@ public class Main {
             System.out.println("4) sort");
             System.out.println("5) save and exit");
 
-            int choice = reader.scanInt(); //todo use try catch in a validator method
+            int choice = reader.scanInt(1,5); //todo use try catch in a validator method
 
             switch (choice) {
                 case 1:
@@ -31,16 +33,15 @@ public class Main {
                     break;
                 case 3:
                     System.out.println("choose if you want to delete the task press 1, if you want to edit the task press 2"); //2
-                    int subChoice = reader.scanInt(); //todo move the printer before the reader
+                    int subChoice = reader.scanInt(1,2); //todo move the printer before the reader
                     if (subChoice == 1) {
 
                         System.out.println("what index do you want to remove"); //todo call display enter index
-                        taskList.remove(reader.scanInt());
+                        taskList.remove(reader.scanInt(1, taskList.size()));
                     } else if (subChoice == 2) {
                         System.out.println("Enter the task number you want to edit");
-                        taskList.editTask(reader.scanInt());
+                        taskList.editTask(reader.scanInt(1, taskList.size()));
                         System.out.println("---");
-                    } else {
                     }
 
                     System.out.println("____");
@@ -50,20 +51,14 @@ public class Main {
                     taskList.displayTask();
                     break;
                 case 5:
+                    taskList.save();
                     running = false;
                     break;
 
                 default:
-                    //taskList.add(); //method 2
-
-                    System.out.println("enter the title of the task: ");
-                    String title = reader.scanString();
-
-                    System.out.println("enter the date of the task: ");
-                    String date = reader.scanString();
+                    System.out.println("please write number from 1 to 5");
 
 
-                    taskList.add(title, date);
             }
         }
 
