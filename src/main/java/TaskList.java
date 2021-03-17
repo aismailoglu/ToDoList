@@ -130,7 +130,7 @@ public class TaskList {
     public List<Task> loadFromFile() {
         List<Task> list = new ArrayList<Task>();
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("ToDo.txt"));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("ToDo.txt")));
             list = (List<Task>) in.readObject();
         } catch (EOFException e) {
             System.out.println("File is empty. First thing you need to do is create a task!");
@@ -139,7 +139,7 @@ public class TaskList {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.toString());
         }
 
         return list;
